@@ -1,0 +1,33 @@
+:root {
+  --bg: #f5f1eb;
+  --surface: #e8dfd1;
+  --text: #2c2825;
+  --accent: #b8956a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1a1714;
+    --surface: #2c2620;
+    --text: #e8dfd1;
+    --accent: #d4a574;
+  }
+}
+
+* {
+  color: var(--text);
+  font-size: 20px;
+
+  @media (pointer: coarse) {
+    font-size: 12px;
+  }
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+  background-color: var(--bg);
+  width: 100dvw;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
