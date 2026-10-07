@@ -343,6 +343,7 @@
     select,
     option {
         background-color: var(--surface);
+        color: var(--accent);
         outline: 0;
         border: 0;
         box-shadow: none;
