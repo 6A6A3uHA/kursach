@@ -103,6 +103,7 @@
         if (!pass) return open_edit()
         if (edit.open) {
             Object.assign(data.users[global_user.id], user)
+            Object.assign(global_user, data.users[global_user.id])
             edit.open = false
         }
         if (pay_type.value == '') {
