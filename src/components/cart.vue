@@ -12,7 +12,15 @@
     })
 
     const router = useRouter()
-    const cart = computed(() => data.carts[global_user.id])
+    const cart = computed(() => {
+          if (!data.carts[global_user.id]) {
+                data.carts[global_user.id] = {
+                  id: global_user.id,
+                  products: {}
+                }
+          }
+      return data.carts[global_user.id]
+    })
     const products = computed(() => data.products)
     const guest_user = { email: "", phone: "", address: "" }
     const user = reactive({ ...guest_user })
