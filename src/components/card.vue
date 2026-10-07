@@ -100,6 +100,7 @@
                     <p class="description">{{ product.description }}</p>
                 </div>
                 <div class="desktop grid-button">
+                    <div class="product-price">{{ product.price }} руб.</div>
                     <div class="button-container">
                         <button v-if="user.root >= 0 && !cart?.products?.[product.id]" class="btn-primary"
                             @click.prevent="addToCart(product.id)" title="Добавить в корзину">Добавить в
@@ -127,6 +128,7 @@
         </div>
         <div>
             <div class="mobile grid-button">
+                <div class="product-price">{{ product.price }} руб.</div>
                 <div class="button-container">
                     <button v-if="user.root >= 0 && !cart?.products?.[product.id]" class="btn-primary"
                         @click.prevent="addToCart(product.id)" title="Добавить в корзину">Добавить в корзину</button>
@@ -227,6 +229,11 @@
         gap: 2rem;
         justify-items: center;
         align-items: center;
+    }
+
+    .product-price {
+        grid-column: 1/3;
+        place-self: center;
     }
 
     .title {
