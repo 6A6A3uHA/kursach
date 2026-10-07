@@ -111,7 +111,7 @@ header {
 
   button {
     grid-area: open_nav;
-    display: none;
+    display: none !important;
     font-size: var(--font-size-large);
   }
 
@@ -120,7 +120,7 @@ header {
       "logo open_nav";
 
     button {
-      display: block;
+      display: flex !important;
     }
 
     nav {
