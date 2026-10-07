@@ -11,15 +11,17 @@
             <div v-if="order.user_id == user.id" class="card">
                 <div class="title-right">
                     <p>Статус:</p>
-                    <h3>{{ order.status == 'created'
-                        ? 'Сформирован'
-                        : order.status == 'in-work'
-                            ? 'Готовится'
-                            : order.status == 'delivery'
-                                ? 'В доставке'
-                                : order.status == 'closed'
-                                    ? 'Завершен'
-                                    : 'Ошибка' }}</h3>
+                    <h3>
+                        {{ order.status == 'created'
+                            ? 'Сформирован'
+                            : order.status == 'in-work'
+                                ? 'Готовится'
+                                : order.status == 'delivery'
+                                    ? 'В доставке'
+                                    : order.status == 'closed'
+                                        ? 'Завершен'
+                                        : 'Ошибка' }}
+                    </h3>
                 </div>
                 <div class="products">
                     <p class="title">Продукты:</p>
@@ -50,9 +52,9 @@
                                 <p>{{ data.products[Number(productId)].price * amount }}</p>
                             </div>
                         </template>
-                        <div class="empty"></div>
-                        <div class="empty"></div>
-                        <div class="empty border-right"></div>
+                        <div class="empty-cell"></div>
+                        <div class="empty-cell"></div>
+                        <div class="empty-cell border-right"></div>
                         <div>
                             <p>Итого:</p>
                             <p>{{ order.total_price }}</p>
@@ -86,25 +88,25 @@
 </template>
 <style lang="css" scoped>
     section {
-        padding-left: 10dvw;
-        padding-right: 10dvw;
-        width: 80dvw;
-        padding-bottom: 5dvh;
-
-        @media (pointer: fine) {
-            padding-top: 5dvh;
-        }
+        margin: 5% 5%;
+        width: 90%;
+        height: 90%;
+        justify-self: center;
+        align-self: center;
+        display: flex;
+        flex-flow: column nowrap;
+        gap: 1rem;
     }
 
     .card {
+        height: auto;
         display: flex;
         flex-flow: column nowrap;
-        gap: 0;
+        gap: 0px;
         border: 1px dotted black;
         box-shadow: 1px 1px 10px black;
         border-radius: 20px;
         overflow: hidden;
-        margin-bottom: 3dvh;
         background-color: var(--surface);
     }
 
@@ -127,24 +129,23 @@
         flex-flow: column nowrap;
         justify-content: center;
         align-items: center;
-        width: 70dvw;
-        padding-left: 5dvw;
-        padding-right: 5dvw;
+        width: 90%;
+        place-self: center;
     }
 
     .product-row {
         display: grid;
         grid-template-columns: 2fr 1fr 1fr 1fr;
-        width: 70dvw;
+        width: 100%;
     }
 
-    .product-row>div:not(.empty) {
+    .product-row>div:not(.empty-cell) {
         justify-items: center;
         border: 1px solid black;
         align-items: center;
     }
 
-    .empty {
+    .empty-cell {
         border-top: 1px solid black;
     }
 

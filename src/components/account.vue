@@ -214,7 +214,7 @@
                 </Transition>
                 <Transition name="input-animation">
                     <input v-if="change" type="text" v-model="user.login" id="login" autocomplete="username"
-                        class="fixed-grid">
+                        class="fixed-grid inp-underline">
                 </Transition>
             </div>
 
@@ -230,7 +230,7 @@
                 </Transition>
                 <Transition name="input-animation">
                     <input v-if="change" type="text" v-model="user.lastname" id="lastname" autocomplete="family-name"
-                        class="fixed-grid">
+                        class="fixed-grid inp-underline">
                 </Transition>
             </div>
 
@@ -246,7 +246,7 @@
                 </Transition>
                 <Transition name="input-animation">
                     <input v-if="change" type="text" v-model="user.firstname" id="firstname" autocomplete="given-name"
-                        class="fixed-grid">
+                        class="fixed-grid inp-underline">
                 </Transition>
             </div>
 
@@ -262,7 +262,7 @@
                 </Transition>
                 <Transition name="input-animation">
                     <input v-if="change" type="text" v-model="user.email" id="email" autocomplete="email"
-                        class="fixed-grid">
+                        class="fixed-grid inp-underline">
                 </Transition>
             </div>
 
@@ -278,7 +278,7 @@
                 </Transition>
                 <Transition name="input-animation">
                     <input v-if="change" type="text" v-model="user.phone" id="phone" autocomplete="tel"
-                        class="fixed-grid">
+                        class="fixed-grid inp-underline">
                 </Transition>
             </div>
         </div>
@@ -296,11 +296,11 @@
                 </Transition>
                 <Transition name="input-animation">
                     <input v-if="change" type="text" v-model="user.address" id="address" autocomplete="street-address"
-                        class="fixed-grid">
+                        class="fixed-grid inp-underline">
                 </Transition>
             </div>
         </div>
-        <button class="change">{{ !change ? "Изменить информацию" : "Сохранить" }}</button>
+        <button class="btn-primary change">{{ !change ? "Изменить информацию" : "Сохранить" }}</button>
     </form>
     <form class="change-password" @submit.prevent="edit_password">
         <Transition name="password-form-animation" @after-leave="clear_passwords">
@@ -308,131 +308,103 @@
                 <Transition name="label-animation" @after-leave="output.old_password = ''">
                     <label for="old_password" v-if="flag_open.old_password">{{ output.old_password }}</label>
                 </Transition>
-                <p>Старый пароль:</p> <input type="text" id="old_password" v-model="passwords.old_password"
+                <p>Старый пароль:</p>
+                <input class="inp-underline" type="text" id="old_password" v-model="passwords.old_password"
                     autocomplete="current-password">
                 <Transition name="label-animation" @after-leave="output.new_password = ''">
                     <label for="new_password" v-if="flag_open.new_password">{{ output.new_password }}</label>
                 </Transition>
-                <p>Новый пароль:</p> <input type="text" id="new_password" v-model="passwords.new_password"
+                <p>Новый пароль:</p>
+                <input class="inp-underline" type="text" id="new_password" v-model="passwords.new_password"
                     autocomplete="new-password">
                 <Transition name="label-animation" @after-leave="output.repeat_new_password = ''">
-                    <label for="repeat_new_password" v-if="flag_open.repeat_new_password">{{ output.repeat_new_password
-                        }}</label>
+                    <label for="repeat_new_password" v-if="flag_open.repeat_new_password">
+                        {{ output.repeat_new_password }}
+                    </label>
                 </Transition>
-                <p>Повторите пароль:</p> <input type="text" id="repeat_new_password"
+                <p>Повторите пароль:</p>
+                <input class="inp-underline" type="text" id="repeat_new_password"
                     v-model="passwords.repeat_new_password" autocomplete="off">
             </div>
         </Transition>
-        <button class="save_password">
+        <button class="btn-primary save_password">
             {{ !open_password ? "Изменить пароль" : flag_edit_password ? "Сохранить" : "Закрыть" }}
         </button>
     </form>
-    <button @click="exit" class="exit">Выйти из аккаунта</button>
+    <button @click="exit" class="btn-primary exit">Выйти из аккаунта</button>
 </template>
 <style lang="css" scoped>
     .important {
         display: grid;
-        width: 90dvw;
-        grid-template-columns: 1fr 3fr;
-        grid-template-rows: 10fr 2fr 1fr;
-        gap: 30px;
-        padding-left: 5dvw;
-        padding-right: 5dvw;
-        padding-top: 10px;
-
-        @media (pointer: coarse) {
-            gap: 15px;
-        }
-
-        height: 80dvh;
-        max-height: 425px;
-        margin-bottom: 20px;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto 20px;
+        grid-template-columns: minmax(50px, 25vw) 1fr;
+        gap: var(--space-5);
+        align-items: start;
     }
 
     .img {
-        grid-area: 1 / 1 / 2 / 2;
+        aspect-ratio: 1 / 1;
+        border-radius: 20px;
+        overflow: hidden;
+        background-color: var(--surface);
     }
 
-    img {
-        width: 20dvh;
-        scale: 1/1;
-
-        @media (pointer: coarse) {
-            width: 20dvw;
-        }
+    .img img {
+        width: 100%;
+        object-fit: cover;
     }
 
     .info {
-        height: 100%;
-        grid-area: 1 / 2 / 1 / 3;
-        padding: 0;
         display: grid;
-        grid-template-columns: 1fr 6fr;
-        grid-auto-rows: 1fr;
-        row-gap: 10px;
-        overflow: hidden;
-    }
-
-    .cell {
-        grid-column: 2/3;
-        align-self: center;
-        align-items: center;
-        height: 20px;
-        position: relative;
-
-        @media (pointer: coarse) {
-            height: 14px;
-        }
-    }
-
-    p {
-        opacity: 1;
-        margin: 0px;
-        padding: 0px;
-        align-self: center;
-        transition: 0.3s ease-in-out;
-        line-height: 1;
-
-        @media (pointer: coarse) {
-            font-size: 14px;
-        }
-
-    }
-
-    input {
-        outline: 0;
-        border: 0;
-        opacity: 1;
-        border-bottom: 1px solid black;
-        height: 16px;
-        background-color: rgba(0, 0, 0, 0);
-        transition: 0.3s ease-in-out;
-
-        @media (pointer: coarse) {
-            height: 10px;
-        }
-
-        align-self: center;
+        grid-template-columns: auto 1fr;
+        row-gap: var(--space-2);
+        align-content: start;
+        margin-right: 5%;
+        width: 95%;
     }
 
     .address {
-        grid-area: 2/1/3/3;
-        grid-template-columns: 1fr 3fr;
-        grid-template-rows: 30px 1fr;
-        overflow: hidden;
+        grid-column: 1 / -1;
+        grid-template-columns: auto 1fr;
+        margin-top: var(--space-2);
+    }
+
+    .cell {
+        grid-column: 2 / 3;
+        position: relative;
+        min-height: var(--font-size-large);
+        display: flex;
+        align-items: center;
+    }
+
+    .info p {
+        grid-column: 1 / 2;
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+        align-self: center;
+        color: var(--text);
+    }
+
+    input {
+        width: 100%;
     }
 
     .fixed-grid {
-        top: 0;
-        left: 0;
         position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
         width: 100%;
+        margin: 0;
     }
 
     .p-animation-enter-from,
     .p-animation-leave-to {
         opacity: 0;
-        transform: translateX(-40px);
+        transform: translateX(-20px);
     }
 
     .p-animation-enter-to,
@@ -444,7 +416,7 @@
     .input-animation-enter-from,
     .input-animation-leave-to {
         opacity: 0;
-        transform: translateX(40dvw);
+        transform: translateX(20px);
     }
 
     .input-animation-enter-to,
@@ -454,24 +426,18 @@
     }
 
     label {
-        height: auto;
-        max-height: 80px;
-        opacity: 1;
-        align-self: center;
-        font-size: 16px;
-        grid-column: 1 / 3;
+        grid-column: 1 / -1;
+        color: rgb(195, 5, 5);
+        font-size: var(--font-size-small);
         margin: 0;
         padding: 0;
         overflow: hidden;
         transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-        color: rgb(195, 5, 5);
+    }
 
-        @media (prefers-color-scheme: dark) {
-            color: rgb(117, 7, 7);
-        }
-
-        @media (pointer: coarse) {
-            font-size: 14px;
+    @media (prefers-color-scheme: dark) {
+        label {
+            color: rgb(255, 100, 100);
         }
     }
 
@@ -488,50 +454,37 @@
     }
 
     .change {
-        grid-area: 3 / 1 / 4 / 3;
-        width: 50dvw;
-        place-self: center;
-        outline: none;
-        border: 1px solid black;
-        border-radius: 20px;
-        padding: 10px;
-        background-color: rgba(0, 0, 0, 0);
-        text-wrap: nowrap;
-        background-color: var(--accent);
-        color: var(--bg);
-
+        grid-column: 1 / -1;
+        width: 100%;
+        max-width: 300px;
+        justify-self: center;
+        margin-top: var(--space-4);
     }
 
     .change-password {
-        width: 100dvw;
-        padding-bottom: 20dvh;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
         display: flex;
-        flex-flow: column nowrap;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-4);
     }
 
     .password {
         display: grid;
-        width: 90dvw;
-        grid-template-columns: 1fr 3fr;
-        grid-template-rows: repeat(20px 1fr, 3);
-        row-gap: 30px;
-        padding-left: 5dvw;
-        padding-right: 5dvw;
+        width: 100%;
+        grid-template-columns: auto 1fr;
+        row-gap: var(--space-3);
         opacity: 1;
         max-height: 400px;
-
-        @media (pointer: coarse) {
-            row-gap: 15px;
-        }
-
-        transition:max-height 0.3s ease-in-out,
-        opacity 0.3s ease-in-out;
+        transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
     }
 
     .password-form-animation-enter-from,
     .password-form-animation-leave-to {
         opacity: 0;
-        max-height: 0px
+        max-height: 0px;
     }
 
     .password-form-animation-enter-to,
@@ -541,48 +494,19 @@
     }
 
     .save_password {
-        width: 40dvw;
-        place-self: center;
-        outline: none;
-        border: 1px solid black;
-        border-radius: 20px;
-        padding: 10px;
-        background-color: rgba(0, 0, 0, 0);
-        margin-top: 20px;
-
-        @media(pointer: coarse) {
-            padding: 20px;
-        }
-
-        background-color: var(--accent);
-        color: var(--bg);
+        width: 100%;
+        max-width: 300px;
     }
 
     .exit {
-        position: absolute;
+        position: fixed;
         bottom: 5dvh;
-        right: 5dvh;
-        outline: none;
-        border: 1px solid black;
-        border-radius: 20px;
-        padding: 10px;
-        background-color: rgba(0, 0, 0, 0);
-
-        @media(pointer: coarse) {
-            padding: 20px;
-        }
-
-        background-color: var(--accent);
-        color: var(--bg);
-    }
-
-    button {
-        cursor: pointer;
+        right: 5dvw;
+        z-index: 50;
     }
 
     button:hover {
         @media (pointer: fine) {
-            box-shadow: 1px 1px 5px var(--text);
             color: var(--text);
         }
     }

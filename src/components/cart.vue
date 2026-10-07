@@ -13,13 +13,13 @@
 
     const router = useRouter()
     const cart = computed(() => {
-          if (!data.carts[global_user.id]) {
-                data.carts[global_user.id] = {
-                  id: global_user.id,
-                  products: {}
-                }
-          }
-      return data.carts[global_user.id]
+        if (!data.carts[global_user.id]) {
+            data.carts[global_user.id] = {
+                id: global_user.id,
+                products: {}
+            }
+        }
+        return data.carts[global_user.id]
     })
     const products = computed(() => data.products)
     const guest_user = { email: "", phone: "", address: "" }
@@ -29,7 +29,7 @@
 
     const total_price = computed(() => {
         if (!cart.value || !cart.value.products) return 0
-        
+
         const productsId = Object.keys(cart.value.products)
         let total = 0
 
@@ -125,7 +125,6 @@
     }
 </script>
 <template>
-    <div class="padding-top"></div>
     <div v-if="total_price !== 0 && cart.products !== undefined">
         <RouterLink :to="{ name: 'card', params: { id: id } }" class="product-row" v-for="number, id in cart.products"
             :title="'Перейти к товару ' + products[Number(id)].name">
@@ -136,14 +135,14 @@
                 {{ products[Number(id)].name }}
             </div>
             <div class="button-container">
-                <div class="edit-amount">
+                <div class="control-amount">
                     <button @click.prevent="minusToCart(Number(id))" class="left"
                         title="Уменьшить количество">-</button>
                     {{ number }}
                     <button @click.prevent="addToCart(Number(id))" class="right" title="Увеличить количество">+</button>
                 </div>
             </div>
-            <button @click.prevent="deleteToCart(Number(id))" class="del">&#128465</button>
+            <button @click.prevent="deleteToCart(Number(id))" class="btn-circle del">&#128465</button>
             <div class="center">
                 {{ products[Number(id)].price + ' руб' }}
             </div>
@@ -152,37 +151,33 @@
     <div class="product-row no-box" v-if="total_price != 0">
         <div class="center">Итого:</div>
         <div class="end center">{{ total_price + ' руб' }}</div>
+        <button @click="buy" class="btn-primary end center">Заказать</button>
     </div>
-    <div class="product-row no-box" v-if="total_price != 0">
-        <button @click="buy" class="btn end center">Заказать</button>
-    </div>
-    <div class="page-center" v-if="total_price == 0">
-        <div>Вы ничего не выбрали</div>
-        <RouterLink :to="{ name: 'home' }">В каталог</RouterLink>
-    </div>
+
     <Transition name="modal-animation" @after-enter="edit.open = true">
         <div class="modal" v-if="modal">
             <Transition name="animation-edit"
                 @after-leave="Object.keys(output).forEach((key) => close(key as keyof typeof output)); modal = false">
-                <div class="edit" v-if="edit.open">
+                <div class="form-grid" v-if="edit.open">
                     <div class="warning">При неправильно заполненных данных вы можете не получить свой заказ</div>
-                    <div class="btn-icon close" @click="edit.open = false">&#10006;</div>
+                    <div class="btn-circle" @click="edit.open = false">&#10006;</div>
                     <Transition name="label-animation">
                         <label for="email" v-if="flag_open.email">{{ output.email }}</label>
                     </Transition>
                     <p>Email:</p>
-                    <input type="text" name="email" v-model="user.email" autocomplete="email">
+                    <input type="text" name="email" v-model="user.email" autocomplete="email" class="inp-underline">
                     <Transition name="label-animation">
                         <label for="phone" v-if="flag_open.phone">{{ output.phone }}</label>
                     </Transition>
                     <p>Телефон:</p>
-                    <input type="text" name="phone" v-model="user.phone" autocomplete="tel">
+                    <input type="text" name="phone" v-model="user.phone" autocomplete="tel" class="inp-underline">
                     <Transition name="label-animation">
                         <label for="address" v-if="flag_open.address">{{ output.address }}</label>
                     </Transition>
                     <p>Адрес:</p>
-                    <input type="text" name="address" v-model="user.address" autocomplete="street-address">
-                    <button class="save" @click="buy">Сохранить</button>
+                    <input type="text" name="address" v-model="user.address" autocomplete="street-address"
+                        class="inp-underline">
+                    <button class="btn-primary grid-center" @click="buy">Сохранить</button>
                 </div>
             </Transition>
         </div>
@@ -190,38 +185,39 @@
     <Transition name="modal-animation" @after-enter="edit.open = true">
         <div class="modal" v-if="modal_type">
             <Transition name="animation-edit" @after-leave="modal_type = false">
-                <div class="edit edit-pay-type" v-if="edit.open">
-                    <div class="btn-icon close" @click="edit.open = false">&#10006;</div>
-                    <h3 class="title">Выберите тип оплаты</h3>
-                    <button class="btn edit-btn" @click="pay_type = 'online'; buy()">Онлайн</button>
-                    <button class="btn edit-btn" @click="pay_type = 'offline'; buy()">При получении</button>
+                <div class="form-grid" v-if="edit.open">
+                    <div class="btn-circle" @click="edit.open = false">&#10006;</div>
+                    <div class="edit-pay-type">
+                        <h3 class="title">Выберите тип оплаты</h3>
+                        <button class="btn-primary" @click="pay_type = 'online'; buy()">Онлайн</button>
+                        <button class="btn-primary" @click="pay_type = 'offline'; buy()">При получении</button>
+                    </div>
                 </div>
             </Transition>
         </div>
     </Transition>
+    <div class="empty" v-if="total_price == 0">
+        <div>Вы ничего не выбрали</div>
+        <RouterLink :to="{ name: 'home' }">В каталог</RouterLink>
+    </div>
 </template>
 <style lang="css" scoped>
-    .padding-top {
-        padding-top: 5dvh;
-    }
 
     .product-row {
-        margin-left: 5dvw;
-        margin-right: 5dvw;
         display: grid;
+        margin: 0 5px;
         grid-template-columns: 1fr 3fr 1fr 1fr 1fr;
-        grid-auto-rows: 5dvh;
-        border: 1px solid black;
+        grid-auto-rows: 3rem;
+        border: 1px solid var(--text);
         border-radius: 20px;
         overflow: hidden;
         align-content: center;
         justify-items: center;
-        margin-bottom: 1dvh;
-        color: black;
-        text-decoration: none;
+        margin-bottom: 1rem;
+        background-color: var(--surface);
 
-        @media (pointer: coarse) {
-            font-size: 16px;
+        &:not(.no-box)&:hover {
+            box-shadow: 1px 1px 5px var(--text);
         }
     }
 
@@ -231,79 +227,18 @@
 
     img {
         aspect-ratio: 1/1;
-        height: 5dvh;
+        height: 100%;
     }
 
     .button-container {
-        align-self: center;
-        margin-top: auto;
-    }
-
-    .edit-amount {
-        display: grid;
-        grid-template-columns: 30px 40px 30px;
-        gap: 5px;
-        justify-items: center;
-        font-size: 24px;
-        height: 5dvh;
-        border: 1px solid black;
-        border-radius: 20px;
-        overflow: hidden;
-        align-items: center;
-
-        @media (pointer: coarse) {
-            font-size: 20px;
-        }
-    }
-
-    .edit-amount>button {
-        text-decoration: none;
-        width: 30px;
-        height: 4.7dvh;
-        background-color: var(--surface);
-        border: 0px solid black;
-        font-size: 24px;
-        cursor: pointer;
         align-content: center;
-
-        @media (pointer: coarse) {
-            font-size: 20px;
-        }
-    }
-
-    .left {
-        border-right: 1px solid black !important;
-        text-align: right;
-        padding-right: 10px;
-    }
-
-    .right {
-        border-left: 1px solid black !important;
-        padding-left: 8px;
-        text-align: left;
+        height: 100%;
     }
 
     .del {
-        text-decoration: none;
-        box-sizing: border-box;
-        border: 1px solid black;
-        border-radius: 20px;
-        justify-self: center;
-        padding: 2px 8px 2px 8px;
-        line-height: 1;
-        font-size: 20px;
-        background-color: var(--surface);
-        cursor: pointer;
-
-        @media (pointer: coarse) {
-            font-size: 16px;
-        }
-    }
-
-    .del {
-        height: 5dvh;
-        width: 5dvh;
+        position: static;
         align-self: center;
+        justify-self: center;
     }
 
     .end {
@@ -316,41 +251,10 @@
 
     .center {
         align-self: center;
-
-        @media (pointer: coarse) {
-            font-size: 16px;
-        }
     }
 
     .no-box {
         border: 0;
-    }
-
-    .btn {
-        text-decoration: none;
-        box-sizing: border-box;
-        color: black;
-        border: 1px solid black;
-        border-radius: 20px;
-        justify-self: center;
-        padding: 2px 8px 2px 8px;
-        line-height: 1;
-        font-size: 20px;
-        cursor: pointer;
-        transition: 0.1s ease-in-out;
-        background-color: var(--accent);
-        color: var(--bg);
-
-        @media (pointer: coarse) {
-            font-size: 16px;
-        }
-    }
-
-    .btn:hover {
-        @media (pointer: fine) {
-            box-shadow: 1px 1px 5px var(--text);
-            color: var(--text);
-        }
     }
 
     .page-center {
@@ -384,10 +288,10 @@
         position: absolute;
         z-index: 10;
         left: 0;
-        top: 15dvh;
-        width: 100dvw;
-        height: 70dvh;
-        background-color: rgba(88, 88, 88, 0.4);
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(88, 88, 88, 0.8);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -395,51 +299,38 @@
         transition: opacity 0.2s ease-in-out;
     }
 
-    .edit {
+    .form-grid {
         position: relative;
-        width: 80dvw;
-        height: 60dvh;
-        display: grid;
-        grid-template-columns: 1fr 3fr;
-        row-gap: 10px;
+        width: 80%;
+        height: 80%;
+
         outline: 2px dashed black;
         border-radius: 20px;
         padding: 20px;
-        background-color: var(--surface);
+        background-color: var(--bg);
 
         transition: transform 0.1s ease-in-out,
             opacity 0.2s ease-in-out;
+    }
 
-        @media (pointer: coarse) {
-            font-size: 16px;
-        }
+    .grid-center {
+        grid-column: 1/3;
+        justify-self: center;
     }
 
     .edit-pay-type {
+        grid-column: 1/3;
+        place-self: center;
+        width: 80%;
+        height: 60%;
         display: grid;
-        grid-template-columns: 1fr 1fr !important;
-        grid-template-rows: 1fr 1fr !important;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        place-items: center;
 
-        @media (pointer: coarse) {
+        @media (width < 1300px) {
             grid-template-columns: 1fr !important;
             grid-template-rows: repeat(3, 1fr) !important;
-        }
-    }
-
-    label {
-        grid-column: 1/3;
-        color: rgb(151, 22, 22);
-        opacity: 1;
-        max-height: 100px;
-        overflow: hidden;
-        transition: 0.3s ease-in-out;
-
-        @media (prefers-color-scheme: dark) {
-            color: rgb(94, 0, 0);
-        }
-
-        @media (pointer: coarse) {
-            font-size: 16px;
         }
     }
 
@@ -453,30 +344,6 @@
     .label-animation-leave-from {
         max-height: 50px;
         opacity: 1;
-    }
-
-    .edit>p {
-        height: 20px;
-        padding: 0;
-        margin: 0;
-        line-height: 1;
-
-        @media (pointer: coarse) {
-            font-size: 16px;
-        }
-    }
-
-    input {
-        height: 20px;
-        outline: 0;
-        border: 0;
-        border-bottom: 1px solid black;
-        background-color: rgba(0, 0, 0, 0);
-        line-height: 1;
-
-        @media (pointer: coarse) {
-            font-size: 16px;
-        }
     }
 
     .modal-animation-enter-from,
@@ -504,66 +371,11 @@
         opacity: 1;
     }
 
-    .close {
-        position: absolute;
-        right: 5px;
-        top: 5px;
-        cursor: pointer;
-    }
-
-    .save {
-        grid-column: 1/3;
-        width: 50dvw;
-        place-self: center;
-        outline: none;
-        border: 1px solid black;
-        border-radius: 20px;
-        padding: 10px;
-        text-wrap: nowrap;
-
-        @media(pointer: coarse) {
-            padding: 20px;
-        }
-
-        background-color: var(--accent);
-        color: var(--bg);
-    }
-
-    .save:hover {
-        @media (pointer: fine) {
-            box-shadow: 1px 1px 5px var(--text);
-            color: var(--text);
-        }
-    }
-
-    .warning {
-        grid-column: 1/3;
-        color: rgb(151, 22, 22);
-
-        @media (prefers-color-scheme: dark) {
-            color: rgb(94, 0, 0);
-        }
-    }
-
     .title {
         place-self: center;
 
-        @media (pointer: fine) {
+        @media (width >=1300px) {
             grid-column: 1/3;
-        }
-    }
-
-    .edit-btn {
-        height: 5dvh;
-        width: 20dvw;
-        min-width: 200px;
-        transition: 0.3s;
-    }
-
-    .edit-btn:hover {
-        @media (pointer: fine) {
-            box-shadow: 1px 1px 5px var(--text);
-            color: var(--text);
         }
     }
 </style>

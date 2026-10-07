@@ -81,13 +81,15 @@
     }
 </script>
 <template>
-    <div class="grid">
-        <div class="cell">id</div>
-        <div class="cell">Название</div>
-        <div class="cell">Состав</div>
-        <div class="cell">Описание</div>
-        <div class="cell">Цена</div>
-        <div class="cell">Редактировать/Удалить</div>
+    <div class="container">
+        <div class="grid">
+            <div class="cell">id</div>
+            <div class="cell">Название</div>
+            <div class="cell">Состав</div>
+            <div class="cell">Описание</div>
+            <div class="cell">Цена</div>
+            <div class="cell">Редактировать/Удалить</div>
+        </div>
     </div>
     <div class="container desktop">
         <div class="grid" v-for="product in products">
@@ -97,8 +99,8 @@
             <div class="cell">{{ product.description }}</div>
             <div class="cell">{{ product.price }}</div>
             <div class="cell flex-row">
-                <button class="btn-icon" @click="open_edit(product.id)">&#9998;</button>
-                <button class="btn-icon" @click="deleteProduct(product.id)">&#10006;</button>
+                <button class="btn-circle" @click="open_edit(product.id)">&#9998;</button>
+                <button class="btn-circle" @click="deleteProduct(product.id)">&#10006;</button>
             </div>
         </div>
     </div>
@@ -109,41 +111,41 @@
         @after-leave="edit.id = -1; Object.assign(product, empty_product)">
         <div class="modal" v-if="modal">
             <Transition name="animation-edit" @after-leave="modal = false">
-                <div class="edit" v-if="edit.open">
-                    <div class="btn-icon close" @click="edit.open = false">&#10006;</div>
+                <div class="form-grid" v-if="edit.open">
+                    <div class="btn-circle absolute" @click="edit.open = false">&#10006;</div>
                     <Transition name="label-animation">
                         <label for="login" v-if="flag_open.name">{{ output.name }}</label>
                     </Transition>
                     <p>Название</p>
-                    <input type="text" name="login" v-model="product.name">
+                    <input class="inp-underline" type="text" name="login" v-model="product.name">
                     <Transition name="label-animation">
                         <label for="firstname" v-if="flag_open.ingridients">{{ output.ingridients }}</label>
                     </Transition>
                     <p>Состав</p>
-                    <input type="text" name="firstname" v-model="product.ingridients">
+                    <input class="inp-underline" type="text" name="firstname" v-model="product.ingridients">
                     <Transition name="label-animation">
                         <label for="firstname" v-if="flag_open.description">{{ output.description }}</label>
                     </Transition>
                     <p>Описание</p>
-                    <input type="text" name="firstname" v-model="product.description">
+                    <input class="inp-underline" type="text" name="firstname" v-model="product.description">
                     <Transition name="label-animation">
                         <label for="lastname" v-if="flag_open.price">{{ output.price }}</label>
                     </Transition>
                     <p>Цена</p>
-                    <input type="text" name="lastname" v-model="product.price">
-                    <button class="save" @click="save">Сохранить</button>
+                    <input class="inp-underline" type="text" name="lastname" v-model="product.price">
+                    <button class="btn-primary" @click="save">Сохранить</button>
                 </div>
             </Transition>
         </div>
     </Transition>
-    <button class="add" @click="open_edit(-1)">Добавить продукт</button>
+    <button class="btn-primary add" @click="open_edit(-1)">Добавить продукт</button>
 </template>
 <style lang="css" scoped>
     .grid {
         display: grid;
         grid-template-columns: 1fr 1fr 4fr 6fr 1fr 1fr;
         grid-template-rows: 50px;
-        width: 99dvw;
+        width: 100%;
         height: 50px;
         z-index: 1;
     }
@@ -157,15 +159,15 @@
         overflow-x: auto;
         width: 100%;
         height: 100%;
-        font-size: 18px;
         cursor: default;
+        font-size: var(--font-size-small);
+        word-break: keep-all;
     }
 
     .container {
         margin: 0;
         padding: 0;
-        width: 100dvw;
-        height: 96%;
+        width: 100%;
         overflow-x: hidden;
         overflow-y: scroll;
     }
@@ -177,36 +179,18 @@
         justify-content: space-evenly;
     }
 
-    .btn-icon {
-        background-color: rgba(0, 0, 0, 0);
-        outline: 0;
-        box-shadow: none;
-        border: 1px solid black;
-        border-radius: 25px;
-        height: 25px;
-        width: 25px;
-        font-size: 16px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        background-color: var(--accent);
-        color: var(--bg);
+    .btn-circle {
+        position: static;
     }
 
-    .btn-icon:hover {
-        @media (pointer: fine) {
-            box-shadow: 1px 1px 5px var(--text);
-            color: var(--text);
-        }
-    }
-
-    .non-active {
-        cursor: not-allowed;
+    .absolute {
+        position: absolute;
     }
 
     .desktop {
-        @media (pointer: coarse) {
+        height: 93%;
+
+        @media (width < 600px) {
             display: none;
         }
     }
@@ -217,10 +201,9 @@
         align-items: center;
         height: 100%;
 
-        @media (pointer:fine) {
+        @media (width>=600px) {
             display: none;
         }
-
     }
 
     .modal {
@@ -228,8 +211,8 @@
         z-index: 10;
         left: 0;
         top: 0;
-        width: 100dvw;
-        height: 70dvh;
+        width: 100%;
+        height: 100%;
         background-color: rgba(88, 88, 88, 0.4);
         display: flex;
         justify-content: center;
@@ -238,33 +221,14 @@
         transition: opacity 0.2s ease-in-out;
     }
 
-    .edit {
+    .form-grid {
         position: relative;
-        width: 80dvw;
-        height: 60dvh;
-        display: grid;
-        grid-template-columns: 1fr 3fr;
-        row-gap: 10px;
-        outline: 2px dashed black;
-        border-radius: 20px;
-        padding: 20px;
         background-color: var(--surface);
-
-        transition: transform 0.1s ease-in-out,
-            opacity 0.2s ease-in-out;
-    }
-
-    label {
-        grid-column: 1/3;
-        color: rgb(151, 22, 22);
-        opacity: 1;
-        max-height: 50px;
-        overflow: hidden;
-        transition: 0.3s ease-in-out;
-
-        @media (prefers-color-scheme: dark) {
-            color: rgb(94, 0, 0);
-        }
+        height: 80%;
+        width: 80%;
+        border-radius: 20px;
+        padding: 1rem;
+        font-size: var(--font-size-large);
     }
 
     .label-animation-enter-from,
@@ -277,29 +241,6 @@
     .label-animation-leave-from {
         max-height: 50px;
         opacity: 1;
-    }
-
-    .edit>p {
-        height: 20px;
-        padding: 0;
-        margin: 0;
-        line-height: 1;
-    }
-
-    input {
-        height: 20px;
-        outline: 0;
-        border: 0;
-        border-bottom: 1px solid black;
-        background-color: rgba(0, 0, 0, 0);
-        line-height: 1;
-    }
-
-    input:hover,
-    input:active {
-        @media (pointer: fine) {
-            border-bottom: 1px solid var(--text);
-        }
     }
 
     .modal-animation-enter-from,
@@ -327,64 +268,18 @@
         opacity: 1;
     }
 
-    .close {
-        position: absolute;
-        right: 5px;
-        top: 5px;
-    }
-
-    .save {
+    .btn-primary {
         grid-column: 1/3;
-        width: 50dvw;
-        place-self: center;
-        outline: none;
-        border: 1px solid black;
-        border-radius: 20px;
-        padding: 10px;
-        text-wrap: nowrap;
-        cursor: pointer;
-
-        @media(pointer: coarse) {
-            padding: 20px;
-        }
-
-        background-color: var(--accent);
-        color: var(--bg);
-    }
-
-    .save:hover {
-        @media (pointer: fine) {
-            box-shadow: 1px 1px 5px var(--text);
-            color: var(--text);
-        }
+        justify-self: center;
     }
 
     .add {
         position: absolute;
         right: 20px;
         bottom: 20px;
-        text-decoration: none;
-        box-sizing: border-box;
-        color: black;
-        border: 1px solid black;
-        border-radius: 20px;
-        justify-self: center;
-        padding: 2px 8px 2px 8px;
-        line-height: 1;
-        cursor: pointer;
-        transition: 0.2s ease-in-out;
-        background-color: var(--accent);
-        color: var(--bg);
 
-        @media (pointer: coarse) {
+        @media (width<600px) {
             display: none;
-        }
-    }
-
-    .add:hover {
-        @media (pointer: fine) {
-            box-shadow: 1px 1px 5px var(--text);
-            color: var(--text);
         }
     }
 </style>

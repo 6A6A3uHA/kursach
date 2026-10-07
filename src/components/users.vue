@@ -89,16 +89,18 @@
     }
 </script>
 <template>
-    <div class="grid">
-        <div class="cell">id</div>
-        <div class="cell">Логин</div>
-        <div class="cell">Имя</div>
-        <div class="cell">Фамилия</div>
-        <div class="cell">Email</div>
-        <div class="cell">Телефон</div>
-        <div class="cell">Адрес</div>
-        <div class="cell">Права</div>
-        <div class="cell">Редактировать/Удалить</div>
+    <div class="container">
+        <div class="grid">
+            <div class="cell">id</div>
+            <div class="cell">Логин</div>
+            <div class="cell">Имя</div>
+            <div class="cell">Фамилия</div>
+            <div class="cell">Email</div>
+            <div class="cell">Телефон</div>
+            <div class="cell">Адрес</div>
+            <div class="cell">Права</div>
+            <div class="cell">Редактировать/Удалить</div>
+        </div>
     </div>
     <div class="container desktop">
         <div class="grid" v-for="user in users">
@@ -113,13 +115,14 @@
                 <button @click="change_root(user.id)" v-if="user.id != global_user.id" class="change-root">
                     {{ user.root == 1 ? "Сделать пользователем" : "Сделать админом" }}
                 </button>
-                <div v-else class="cursor">Админ</div>
+                <div v-else>Админ</div>
             </div>
             <div class="cell flex-row">
-                <button class="btn-icon" @click="open_edit(user.id)" v-if="user.id != global_user.id">&#9998;</button>
-                <button class="btn-icon non-active" v-else>&#9998;</button>
-                <button class="btn-icon" @click="deleteUser(user.id)" v-if="user.id != global_user.id">&#10006;</button>
-                <button class="btn-icon non-active" v-else>&#10006;</button>
+                <button class="btn-circle" @click="open_edit(user.id)" v-if="user.id != global_user.id">&#9998;</button>
+                <button class="btn-circle non-active" v-else>&#9998;</button>
+                <button class="btn-circle" @click="deleteUser(user.id)"
+                    v-if="user.id != global_user.id">&#10006;</button>
+                <button class="btn-circle non-active" v-else>&#10006;</button>
             </div>
         </div>
     </div>
@@ -129,39 +132,39 @@
     <Transition name="modal-animation" @after-enter="edit.open = true">
         <div class="modal" v-if="modal">
             <Transition name="animation-edit" @after-leave="modal = false">
-                <div class="edit" v-if="edit.open">
-                    <div class="btn-icon close" @click="edit.open = false">&#10006;</div>
+                <div class="form-grid" v-if="edit.open">
+                    <div class="btn-circle absolute" @click="edit.open = false">&#10006;</div>
                     <Transition name="label-animation">
                         <label for="login" v-if="flag_open.login">{{ output.login }}</label>
                     </Transition>
                     <p>Логин:</p>
-                    <input type="text" id="login" v-model="user.login">
+                    <input class="inp-underline" type="text" id="login" v-model="user.login">
                     <Transition name="label-animation">
                         <label for="firstname" v-if="flag_open.firstname">{{ output.firstname }}</label>
                     </Transition>
                     <p>Имя:</p>
-                    <input type="text" id="firstname" v-model="user.firstname">
+                    <input class="inp-underline" type="text" id="firstname" v-model="user.firstname">
                     <Transition name="label-animation">
                         <label for="lastname" v-if="flag_open.lastname">{{ output.lastname }}</label>
                     </Transition>
                     <p>Фамилия:</p>
-                    <input type="text" id="lastname" v-model="user.lastname">
+                    <input class="inp-underline" type="text" id="lastname" v-model="user.lastname">
                     <Transition name="label-animation">
                         <label for="email" v-if="flag_open.email">{{ output.email }}</label>
                     </Transition>
                     <p>Email:</p>
-                    <input type="text" id="email" v-model="user.email">
+                    <input class="inp-underline" type="text" id="email" v-model="user.email">
                     <Transition name="label-animation">
                         <label for="phone" v-if="flag_open.phone">{{ output.phone }}</label>
                     </Transition>
                     <p>Телефон:</p>
-                    <input type="text" id="phone" v-model="user.phone">
+                    <input class="inp-underline" type="text" id="phone" v-model="user.phone">
                     <Transition name="label-animation">
                         <label for="address" v-if="flag_open.address">{{ output.address }}</label>
                     </Transition>
                     <p>Адрес:</p>
-                    <input type="text" id="address" v-model="user.address">
-                    <button class="save" @click="save">Сохранить</button>
+                    <input class="inp-underline" type="text" id="address" v-model="user.address">
+                    <button class="btn-primary" @click="save">Сохранить</button>
                 </div>
             </Transition>
         </div>
@@ -171,9 +174,9 @@
     .grid {
         display: grid;
         grid-template-columns: 1fr 2fr 2fr 2fr 2fr 2fr 2fr 3fr 2fr;
-        grid-template-rows: 35px;
-        width: 99dvw;
-        height: 35px;
+        grid-template-rows: 50px;
+        width: 100%;
+        height: 50px;
         z-index: 1;
     }
 
@@ -186,22 +189,20 @@
         overflow-x: auto;
         width: 100%;
         height: 100%;
-        font-size: 18px;
         cursor: default;
+        font-size: var(--font-size-small);
+        word-break: keep-all;
     }
 
     .container {
         margin: 0;
         padding: 0;
-        width: 100dvw;
-        height: 96%;
+        width: 100%;
         overflow-x: hidden;
         overflow-y: scroll;
     }
 
-    .change-root,
-    .change-root:hover,
-    .change-root:active {
+    .change-root {
         width: 100%;
         height: 100%;
         margin: 0;
@@ -212,10 +213,10 @@
         border: 0;
         cursor: pointer;
         text-align: start;
-        font-size: 16px;
+        color: var(--text);
 
-        @media (pointer: coarse) {
-            border: 1px solid green;
+        &:hover {
+            color: var(--accent);
         }
     }
 
@@ -226,28 +227,12 @@
         justify-content: space-evenly;
     }
 
-    .btn-icon {
-        background-color: rgba(0, 0, 0, 0);
-        outline: 0;
-        box-shadow: none;
-        border: 1px solid black;
-        border-radius: 25px;
-        height: 25px;
-        width: 25px;
-        font-size: 16px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        background-color: var(--accent);
-        color: var(--bg);
+    .btn-circle {
+        position: static;
     }
 
-    .btn-icon:hover {
-        @media (pointer: fine) {
-            box-shadow: 1px 1px 5px var(--text);
-            color: var(--text);
-        }
+    .absolute {
+        position: absolute;
     }
 
     .non-active {
@@ -256,7 +241,9 @@
     }
 
     .desktop {
-        @media (pointer: coarse) {
+        height: 93%;
+
+        @media (width < 600px) {
             display: none;
         }
     }
@@ -267,7 +254,7 @@
         align-items: center;
         height: 100%;
 
-        @media (pointer:fine) {
+        @media (width>=600px) {
             display: none;
         }
     }
@@ -277,8 +264,8 @@
         z-index: 10;
         left: 0;
         top: 0;
-        width: 100dvw;
-        height: 70dvh;
+        width: 100%;
+        height: 100%;
         background-color: rgba(88, 88, 88, 0.4);
         display: flex;
         justify-content: center;
@@ -287,33 +274,14 @@
         transition: opacity 0.2s ease-in-out;
     }
 
-    .edit {
+    .form-grid {
         position: relative;
-        width: 80dvw;
-        height: 60dvh;
-        display: grid;
-        grid-template-columns: 1fr 3fr;
-        row-gap: 10px;
-        outline: 2px dashed black;
-        border-radius: 20px;
-        padding: 20px;
         background-color: var(--surface);
-
-        transition: transform 0.1s ease-in-out,
-            opacity 0.2s ease-in-out;
-    }
-
-    label {
-        grid-column: 1/3;
-        color: rgb(151, 22, 22);
-        opacity: 1;
-        max-height: 50px;
-        overflow: hidden;
-        transition: 0.3s ease-in-out;
-
-        @media (prefers-color-scheme: dark) {
-            color: rgb(94, 0, 0);
-        }
+        height: 80%;
+        width: 80%;
+        border-radius: 20px;
+        padding: 1rem;
+        font-size: var(--font-size-large);
     }
 
     .label-animation-enter-from,
@@ -326,29 +294,6 @@
     .label-animation-leave-from {
         max-height: 50px;
         opacity: 1;
-    }
-
-    .edit>p {
-        height: 20px;
-        padding: 0;
-        margin: 0;
-        line-height: 1;
-    }
-
-    input {
-        height: 20px;
-        outline: 0;
-        border: 0;
-        border-bottom: 1px solid black;
-        background-color: rgba(0, 0, 0, 0);
-        line-height: 1;
-    }
-
-    input:hover,
-    input:focus {
-        @media (pointer: fine) {
-            border-bottom: 1px solid var(--text);
-        }
     }
 
     .modal-animation-enter-from,
@@ -376,36 +321,8 @@
         opacity: 1;
     }
 
-    .close {
-        position: absolute;
-        right: 5px;
-        top: 5px;
-    }
-
-    .save {
+    .btn-primary {
         grid-column: 1/3;
-        width: 50dvw;
-        place-self: center;
-        outline: none;
-        border: 1px solid black;
-        border-radius: 20px;
-        padding: 10px;
-        background-color: rgba(0, 0, 0, 0);
-        text-wrap: nowrap;
-        cursor: pointer;
-
-        @media(pointer: coarse) {
-            padding: 20px;
-        }
-
-        background-color: var(--accent);
-        color: var(--bg);
-    }
-
-    .save:hover {
-        @media (pointer: fine) {
-            box-shadow: 1px 1px 5px var(--text);
-            color: var(--text);
-        }
+        justify-self: center;
     }
 </style>

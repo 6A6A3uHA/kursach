@@ -72,15 +72,17 @@
     }
 </script>
 <template>
-    <div class="grid">
-        <div class="cell">id</div>
-        <div class="cell">Пользователь</div>
-        <div class="cell">Продукты</div>
-        <div class="cell">Время создания</div>
-        <div class="cell">Тип оплаты</div>
-        <div class="cell">Статус</div>
-        <div class="cell">Итого</div>
-        <div class="cell">Редактирование</div>
+    <div class="container">
+        <div class="grid">
+            <div class="cell">id</div>
+            <div class="cell">Пользователь</div>
+            <div class="cell">Продукты</div>
+            <div class="cell">Время создания</div>
+            <div class="cell">Тип оплаты</div>
+            <div class="cell">Статус</div>
+            <div class="cell">Итого</div>
+            <div class="cell">Редактирование</div>
+        </div>
     </div>
     <div class="container desktop">
         <div class="grid" v-for="order in orders">
@@ -110,8 +112,8 @@
             </div>
             <div class="cell">{{ order.total_price }}</div>
             <div class="cell flex-row">
-                <button class="btn-icon" @click="open_edit(order.id)">&#9998;</button>
-                <button class="btn-icon" @click="deleteOrder(order.id)">&#10006;</button>
+                <button class="btn-circle" @click="open_edit(order.id)">&#9998;</button>
+                <button class="btn-circle" @click="deleteOrder(order.id)">&#10006;</button>
             </div>
         </div>
     </div>
@@ -123,8 +125,8 @@
         @before-enter="Object.assign(order, JSON.parse(JSON.stringify(orders[edit.id])))">
         <div class="modal" v-if="modal">
             <Transition name="animation-edit" @after-leave="modal = false">
-                <div class="edit" v-if="edit.open">
-                    <div class="btn-icon close" @click="edit.open = false">&#10006;</div>
+                <div class="form-grid" v-if="edit.open">
+                    <div class="btn-circle absolute" @click="edit.open = false">&#10006;</div>
 
                     <p>id</p>
                     <p>{{ order.id }}</p>
@@ -148,10 +150,11 @@
                                     </option>
                                 </template>
                             </select>
-                            <input type="number" v-model="order.products[product_id]" :id="'amount' + index">
-                            <button class="btn" @click="delete order.products[product_id]">Удалить</button>
+                            <input class="inp-underline" type="number" v-model="order.products[product_id]"
+                                :id="'amount' + index">
+                            <button class="btn-primary" @click="delete order.products[product_id]">Удалить</button>
                         </div>
-                        <button class="btn" @click="order.products[-1] = 0">Добавить</button>
+                        <button class="btn-primary grid-center" @click="order.products[-1] = 0">Добавить</button>
                     </div>
                     <p>Время создания</p>
                     <p>{{ order.date }}</p>
@@ -173,13 +176,13 @@
                         <label for="login" v-if="flag_open.total_price">{{ output.total_price }}</label>
                     </Transition>
                     <p>Итого</p>
-                    <input type="text" id="total-price" v-model="order.total_price">
+                    <input class="inp-underline" type="text" id="total-price" v-model="order.total_price">
                     <Transition name="label-animation">
                         <label for="login" v-if="flag_open.address">{{ output.address }}</label>
                     </Transition>
                     <p>Адрес</p>
-                    <input type="text" id="address" v-model="order.address">
-                    <button class="save" @click="save">Сохранить</button>
+                    <input class="inp-underline" type="text" id="address" v-model="order.address">
+                    <button class="btn-primary grid-center" @click="save">Сохранить</button>
                 </div>
             </Transition>
         </div>
@@ -189,9 +192,9 @@
     .grid {
         display: grid;
         grid-template-columns: 1fr 2fr 2fr 1fr 1fr 1fr 1fr 1fr;
-        grid-template-rows: 1fr;
-        width: 99dvw;
-        min-height: 50px;
+        grid-auto-rows: 80px;
+        width: 100%;
+        height: 80px;
         z-index: 1;
     }
 
@@ -204,14 +207,16 @@
         overflow-x: auto;
         width: 100%;
         height: 100%;
-        font-size: 18px;
         cursor: default;
+        font-size: var(--font-size-small);
+        word-break: keep-all;
     }
 
     .cell-product {
         display: flex;
         flex-flow: column nowrap;
         overflow-y: scroll;
+        height: 100%;
     }
 
     .cell-option {
@@ -221,8 +226,7 @@
     .container {
         margin: 0;
         padding: 0;
-        width: 100dvw;
-        height: 96%;
+        width: 100%;
         overflow-x: hidden;
         overflow-y: scroll;
     }
@@ -234,20 +238,8 @@
         justify-content: space-evenly;
     }
 
-    .btn-icon {
-        background-color: rgba(0, 0, 0, 0);
-        outline: 0;
-        border: 1px solid black;
-        border-radius: 25px;
-        height: 25px;
-        width: 25px;
-        font-size: 16px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        background-color: var(--accent);
-        color: var(--bg);
+    .btn-circle {
+        position: static;
     }
 
     .btn-icon:hover {
@@ -257,12 +249,14 @@
         }
     }
 
-    .non-active {
-        cursor: not-allowed;
+    .absolute {
+        position: absolute;
     }
 
     .desktop {
-        @media (pointer: coarse) {
+        height: 93%;
+
+        @media (width < 600px) {
             display: none;
         }
     }
@@ -273,10 +267,9 @@
         align-items: center;
         height: 100%;
 
-        @media (pointer:fine) {
+        @media (width>=600px) {
             display: none;
         }
-
     }
 
     .modal {
@@ -284,8 +277,8 @@
         z-index: 10;
         left: 0;
         top: 0;
-        width: 100dvw;
-        height: 70dvh;
+        width: 100%;
+        height: 100%;
         background-color: rgba(88, 88, 88, 0.4);
         display: flex;
         justify-content: center;
@@ -294,33 +287,14 @@
         transition: opacity 0.2s ease-in-out;
     }
 
-    .edit {
+    .form-grid {
         position: relative;
-        width: 80dvw;
-        height: 60dvh;
-        display: grid;
-        grid-template-columns: 1fr 3fr;
-        row-gap: 10px;
-        outline: 2px dashed black;
-        border-radius: 20px;
-        padding: 20px;
         background-color: var(--surface);
-
-        transition: transform 0.1s ease-in-out,
-            opacity 0.2s ease-in-out;
-    }
-
-    label {
-        grid-column: 1/3;
-        color: rgb(151, 22, 22);
-        opacity: 1;
-        max-height: 50px;
-        overflow: hidden;
-        transition: 0.3s ease-in-out;
-
-        @media (prefers-color-scheme: dark) {
-            color: rgb(94, 0, 0);
-        }
+        height: 80%;
+        width: 80%;
+        border-radius: 20px;
+        padding: 1rem;
+        font-size: var(--font-size-large);
     }
 
     .label-animation-enter-from,
@@ -333,29 +307,6 @@
     .label-animation-leave-from {
         max-height: 50px;
         opacity: 1;
-    }
-
-    .edit>p {
-        height: 20px;
-        padding: 0;
-        margin: 0;
-        line-height: 1;
-    }
-
-    input {
-        height: 20px;
-        outline: 0;
-        border: 0;
-        border-bottom: 1px solid black;
-        background-color: rgba(0, 0, 0, 0);
-        line-height: 1;
-    }
-
-    input:hover,
-    input:active {
-        @media (pointer: fine) {
-            border-bottom: 1px solid var(--text);
-        }
     }
 
     .modal-animation-enter-from,
@@ -381,39 +332,6 @@
     .animation-edit-enter-to,
     .animation-edit-leave-from {
         opacity: 1;
-    }
-
-    .close {
-        position: absolute;
-        right: 5px;
-        top: 5px;
-    }
-
-    .save {
-        grid-column: 1/3;
-        width: 50dvw;
-        place-self: center;
-        outline: none;
-        border: 1px solid black;
-        border-radius: 20px;
-        padding: 10px;
-        background-color: rgba(0, 0, 0, 0);
-        text-wrap: nowrap;
-        cursor: pointer;
-
-        @media(pointer: coarse) {
-            padding: 20px;
-        }
-
-        background-color: var(--accent);
-        color: var(--bg);
-    }
-
-    .save:hover {
-        @media (pointer: fine) {
-            box-shadow: 1px 1px 5px var(--text);
-            color: var(--text);
-        }
     }
 
     .product {
@@ -443,35 +361,18 @@
     .products {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
+        column-gap: var(--space-3);
         grid-auto-rows: 1fr;
         padding-bottom: 1dvh;
     }
 
-    .btn {
-        place-self: center;
-        outline: none;
-        border: 1px solid black;
-        border-radius: 20px;
-        padding: 10px;
-        text-wrap: nowrap;
-        cursor: pointer;
-
-        @media(pointer: coarse) {
-            padding: 20px;
-        }
-
-        background-color: var(--accent);
-        color: var(--bg);
-    }
-
-    .btn:hover {
-        @media (pointer: fine) {
-            box-shadow: 1px 1px 5px var(--text);
-            color: var(--text);
-        }
-    }
-
     .product-overflow {
+        height: 100%;
         overflow-y: scroll;
+    }
+
+    .grid-center {
+        grid-column: 1/3;
+        justify-self: center;
     }
 </style>
