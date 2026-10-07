@@ -28,6 +28,8 @@
     const pay_type = ref<'' | NewOrder['pay_type']>('')
 
     const total_price = computed(() => {
+        if (!cart.value || !cart.value.products) return 0
+        
         const productsId = Object.keys(cart.value.products)
         let total = 0
 
