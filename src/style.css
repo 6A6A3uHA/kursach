@@ -388,7 +388,8 @@ button {
 .form-grid {
   display: grid;
   width: 100%;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 25% 1fr;
+  grid-auto-rows: min-content;
   row-gap: 10px;
   align-items: center;
 

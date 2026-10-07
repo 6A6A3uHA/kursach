@@ -299,11 +299,15 @@
         transition: opacity 0.2s ease-in-out;
     }
 
+    .warning {
+        grid-column: 1/3;
+    }
+
     .form-grid {
         position: relative;
         width: 80%;
         height: 80%;
-
+        overflow-y: scroll;
         outline: 2px dashed black;
         border-radius: 20px;
         padding: 20px;
@@ -329,6 +333,7 @@
         place-items: center;
 
         @media (width < 1300px) {
+            height: 100%;
             grid-template-columns: 1fr !important;
             grid-template-rows: repeat(3, 1fr) !important;
         }

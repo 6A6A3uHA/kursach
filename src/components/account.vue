@@ -361,8 +361,8 @@
         grid-template-columns: auto 1fr;
         row-gap: var(--space-2);
         align-content: start;
-        margin-right: 5%;
-        width: 95%;
+        margin: 0px 5%;
+        width: 90%;
     }
 
     .address {
@@ -473,7 +473,8 @@
 
     .password {
         display: grid;
-        width: 100%;
+        width: 90%;
+        padding: 0 5%;
         grid-template-columns: auto 1fr;
         row-gap: var(--space-3);
         opacity: 1;
