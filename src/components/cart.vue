@@ -12,7 +12,15 @@
     })
 
     const router = useRouter()
-    const cart = computed(() => data.carts[global_user.id])
+    const cart = computed(() => {
+          if (!data.carts[global_user.id]) {
+                data.carts[global_user.id] = {
+                  id: global_user.id,
+                  products: {}
+                }
+          }
+      return data.carts[global_user.id]
+    })
     const products = computed(() => data.products)
     const guest_user = { email: "", phone: "", address: "" }
     const user = reactive({ ...guest_user })
@@ -20,6 +28,8 @@
     const pay_type = ref<'' | NewOrder['pay_type']>('')
 
     const total_price = computed(() => {
+        if (!cart.value || !cart.value.products) return 0
+        
         const productsId = Object.keys(cart.value.products)
         let total = 0
 
@@ -93,6 +103,7 @@
         if (!pass) return open_edit()
         if (edit.open) {
             Object.assign(data.users[global_user.id], user)
+            Object.assign(global_user, data.users[global_user.id])
             edit.open = false
         }
         if (pay_type.value == '') {

@@ -49,7 +49,6 @@
     }
 
     function filter_price(min = 0, max = 999999) {
-        console.log(min, max);
 
         let list_products = JSON.parse(JSON.stringify(Object.values(products.value))) as Product[]
         return list_products.filter((product) => product.price >= min && product.price <= max)
