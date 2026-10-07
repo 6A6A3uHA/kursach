@@ -36,7 +36,7 @@ const routes: RouteRecordRaw[] = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes
 })
 export const redirect_from = ref<RouteLocationNormalized | null>(null)
